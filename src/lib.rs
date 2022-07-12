@@ -53,9 +53,10 @@ impl TDigestBuilder {
 
     /// Returns a `TDigest` that uses this `TDigestBuilder` configuration.
     pub fn build(self) -> TDigest {
+        let centroids = Vec::with_capacity(self.config.max_centroids);
         TDigest {
             config: self.config,
-            centroids: vec![],
+            centroids,
             count: 0,
             unmerged: 0,
         }
