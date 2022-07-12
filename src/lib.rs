@@ -129,6 +129,26 @@ impl TDigest {
         TDigestBuilder::new()
     }
 
+    /// Moves all the elements of `other` into `self`, leaving `other` empty.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ch_tdigest::TDigest;
+    ///
+    /// let mut a = TDigest::from([-10.0, 1.0, 2.0, 2.0, 3.0]);
+    /// let mut b = TDigest::from([-20.0, 5.0, 43.0]);
+    ///
+    /// a.append(&mut b);
+    ///
+    /// assert_eq!(a.len(), 8);
+    /// assert!(b.is_empty());
+    /// ```
+    pub fn append(&mut self, other: &mut TDigest) {
+        self.bitor_assign(other);
+        other.clear();
+    }
+
     /// Returns the number of elements in the t-digest.
     ///
     /// # Examples
