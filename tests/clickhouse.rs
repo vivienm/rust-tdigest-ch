@@ -6,6 +6,7 @@ fn negative() {
     let mut digest = TDigest::from([-1.0, -2.0, -3.0]);
     assert_eq!(digest.quantile(0.5), -2.0);
 }
+
 #[test]
 fn infinity_2() {
     // Source: https://github.com/ClickHouse/ClickHouse/blob/5e34f48a181744a9f9241e3da0522eeaf9c68b84/tests/queries/0_stateless/02286_quantile_tdigest_infinity.sql.
