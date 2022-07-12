@@ -262,17 +262,16 @@ impl TDigest {
 
         let x = level * self.count as f64;
         let mut prev_x = 0f64;
-        let mut sum = 0f64;
-        let mut prev_mean = self.centroids[0].mean as f64;
-        let mut prev_count = self.centroids[0].count;
+        let mut sum = 0usize;
+        let mut prev = self.centroids[0];
 
         for c in self.centroids.iter() {
-            let current_x = sum + c.count as f64 * 0.5;
+            let current_x = sum as f64 + c.count as f64 * 0.5;
 
             if current_x >= x {
                 // Special handling of singletons.
                 let mut left = prev_x;
-                if prev_count == 1 {
+                if prev.count == 1 {
                     left += 0.5;
                 }
                 let mut right = current_x;
@@ -282,24 +281,17 @@ impl TDigest {
 
                 return {
                     if x <= left {
-                        prev_mean as f32
+                        prev.mean
                     } else if x >= right {
                         c.mean
                     } else {
-                        interpolate(
-                            x as f32,
-                            left as f32,
-                            prev_mean as f32,
-                            right as f32,
-                            c.mean,
-                        )
+                        interpolate(x as f32, left as f32, prev.mean, right as f32, c.mean)
                     }
                 };
             }
 
-            sum += c.count as f64;
-            prev_mean = c.mean as f64;
-            prev_count = c.count;
+            sum += c.count;
+            prev = *c;
             prev_x = current_x;
         }
 
