@@ -20,6 +20,18 @@ struct Config {
 }
 
 /// A `TDigestBuilder` can be used to create a `TDigest` with custom configuration.
+///
+/// # Examples
+///
+/// ```
+/// use ch_tdigest::TDigestBuilder;
+///
+/// let mut builder = TDigestBuilder::new();
+/// builder.max_centroids(1024);
+/// builder.max_unmerged(1024);
+///
+/// let digest = builder.build();
+/// ```
 #[derive(Debug)]
 pub struct TDigestBuilder {
     config: Config,
@@ -99,6 +111,27 @@ fn cmp_f32(lhs: f32, rhs: f32) -> Ordering {
     }
 }
 
+/// A histogram structure that will record a sketch of a distribution.
+///
+/// This is an implementation of Ted Dunning's [t-digest](https://github.com/tdunning/t-digest)
+/// data structure.
+///
+/// # Examples
+///
+/// ```
+/// use ch_tdigest::TDigest;
+///
+/// let mut digest = TDigest::new();
+///
+/// // Add some elements.
+/// digest.insert(1.0);
+/// digest.insert(2.0);
+/// digest.insert(3.0);
+///
+/// // Get the median of the distribution.
+/// let quantile = digest.quantile(0.5);
+/// assert_eq!(quantile, 2.0);
+/// ```
 #[derive(Clone, Debug, PartialEq)]
 pub struct TDigest {
     config: Config,
