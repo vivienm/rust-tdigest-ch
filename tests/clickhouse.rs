@@ -8,6 +8,20 @@ fn negative() {
 }
 
 #[test]
+fn infinity_1() {
+    // Source: https://github.com/ClickHouse/ClickHouse/blob/5e34f48a181744a9f9241e3da0522eeaf9c68b84/tests/queries/0_stateless/02286_quantile_tdigest_infinity.sql.
+    let mut digest = TDigest::new();
+    digest.insert(f32::INFINITY);
+    for _ in 1..500_000 {
+        digest.insert(f32::NEG_INFINITY);
+    }
+    for _ in 500_000..1_000_000 {
+        digest.insert(f32::INFINITY);
+    }
+    assert!(digest.quantile(0.5).is_nan());
+}
+
+#[test]
 fn infinity_2() {
     // Source: https://github.com/ClickHouse/ClickHouse/blob/5e34f48a181744a9f9241e3da0522eeaf9c68b84/tests/queries/0_stateless/02286_quantile_tdigest_infinity.sql.
     let mut values = Vec::with_capacity(300);
