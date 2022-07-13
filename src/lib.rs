@@ -354,13 +354,14 @@ impl TDigest {
             self.centroids.sort_by(|l, r| cmp_f32(l.mean, r.mean));
 
             let mut l_index = 0;
-            let mut l = self.centroids[l_index];
 
             // Compiler is unable to do this optimization.
             let count_epsilon_4 = self.count as f64 * self.config.epsilon as f64 * 4.;
             let mut sum = 0;
-            let mut l_mean = l.mean as f64;
-            let mut l_count = l.count;
+            let (mut l_mean, mut l_count) = {
+                let l = self.centroids.first().unwrap();
+                (l.mean as f64, l.count)
+            };
             for r_index in 1..self.centroids.len() {
                 let r = self.centroids[r_index];
                 // N.B. We cannot merge all the same values into single centroids because this will
@@ -397,23 +398,25 @@ impl TDigest {
                         // Symmetric algo (M1*C1 + M2*C2)/(C1+C2) is numerically better, but slower.
                         l_mean += r.count as f64 * (r.mean as f64 - l_mean) / l_count as f64;
                     }
-                    l.mean = l_mean as f32;
-                    l.count = l_count;
+                    self.centroids[l_index] = Centroid {
+                        mean: l_mean as f32,
+                        count: l_count,
+                    };
                 } else {
                     // Not enough capacity, check the next pair.
                     // Not l_count, otherwise actual sum of elements will be different.
-                    sum += l.count;
+                    sum += self.centroids[l_index].count;
                     l_index += 1;
-                    l = self.centroids[l_index];
 
                     // We skip all the values "eaten" earlier.
                     while l_index != r_index {
-                        l.count = 0;
+                        self.centroids[l_index].count = 0;
                         l_index += 1;
-                        l = self.centroids[l_index];
                     }
-                    l_mean = l.mean as f64;
-                    l_count = l.count;
+                    (l_mean, l_count) = {
+                        let l = self.centroids[l_index];
+                        (l.mean as f64, l.count)
+                    };
                 }
             }
             // Update count, it might be different due to += inaccuracy
@@ -438,11 +441,12 @@ impl TDigest {
         debug_assert!(batch_size >= 2);
 
         let mut l_index = 0;
-        let mut l = self.centroids[l_index];
         let mut sum = 0;
         // We have high-precision temporaries for numeric stability
-        let mut l_mean = l.mean as f64;
-        let mut l_count = l.count;
+        let (mut l_mean, mut l_count) = {
+            let l = self.centroids.first().unwrap();
+            (l.mean as f64, l.count)
+        };
         let mut batch_pos = 0usize;
 
         for r_index in 1..self.centroids.len() {
@@ -455,38 +459,40 @@ impl TDigest {
                     // Symmetric algo (M1*C1 + M2*C2)/(C1+C2) is numerically better, but slower.
                     l_mean += r.count as f64 * (r.mean as f64 - l_mean) / l_count as f64;
                 }
-                l.mean = l_mean as f32;
-                l.count = l_count;
+                self.centroids[l_index] = Centroid {
+                    mean: l_mean as f32,
+                    count: l_count,
+                };
                 batch_pos += 1;
             } else {
                 // End of the batch, start the next one.
-                if !l.mean.is_nan() {
+                if !self.centroids[l_index].mean.is_nan() {
                     // Skip writing batch result if we compressed something to nan.
                     // Not l_count, otherwise actual sum of elements will be different.
-                    sum += l.count;
+                    sum += self.centroids[l_index].count;
                     l_index += 1;
-                    l = self.centroids[l_index];
                 }
 
                 while l_index != r_index {
                     // We skip all the values "eaten" earlier.
-                    l.count = 0;
+                    self.centroids[l_index].count = 0;
                     l_index += 1;
-                    l = self.centroids[l_index];
                 }
-                l_mean = l.mean as f64;
-                l_count = l.count;
+                (l_mean, l_count) = {
+                    let l = self.centroids[l_index];
+                    (l.mean as f64, l.count)
+                };
                 batch_pos = 0;
             }
         }
 
-        if !l.mean.is_nan() {
+        if !self.centroids[l_index].mean.is_nan() {
             // Update count, it might be different due to += inaccuracy.
             self.count = sum + l_count;
         } else {
             // Skip writing last batch if (super unlikely) it's nan.
             self.count = sum;
-            l.count = 0;
+            self.centroids[l_index].count = 0;
         }
         self.centroids.retain(|c| c.count != 0);
         // Here centroids.len() <= params.max_centroids.
