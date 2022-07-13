@@ -7,7 +7,7 @@ use rand::Rng;
 fn uniform() {
     let mut digest = TDigest::new();
     let mut rng = rand::thread_rng();
-    for _ in 0..10_000 {
+    for _ in 0..100_000 {
         digest.insert(rng.gen::<f32>());
     }
 
@@ -31,7 +31,7 @@ fn uniform() {
 #[test]
 fn ints() {
     let mut digest = TDigest::from([1.0, 2.0, 3.0]);
-    assert!(digest.quantile(0.5) - 2. < 0.0001);
+    assert!(digest.quantile(0.5) - 2.0 < 0.0001);
 
     let values = vec![1.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 3.0];
     let mut digest = TDigest::from_iter(values.iter().copied());
