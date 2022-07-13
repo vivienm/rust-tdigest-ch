@@ -14,7 +14,6 @@ fn digest_10() {
 }
 
 #[test]
-#[ignore]
 fn digest_1_000_000() {
     let mut digest = TDigest::new();
     digest.extend((1u32..=1_000_000).map(|value| value as f32));
@@ -22,9 +21,9 @@ fn digest_1_000_000() {
 
     for (quantile, expected) in [
         (0., 1.),
-        (0.1, 100_000.),
-        (0.5, 500_000.),
-        (0.9, 900_000.),
+        (0.1, 100_000.5),
+        (0.5, 500_000.5),
+        (0.9, 900_000.5),
         (1., 1_000_000.),
     ] {
         assert_eq!(digest.quantile(quantile), expected);
