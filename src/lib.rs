@@ -496,7 +496,7 @@ impl TDigest {
         }
         self.centroids.retain(|c| c.count != 0);
         // Here centroids.len() <= params.max_centroids.
-        // debug_assert!(self.centroids.len() <= self.config.max_centroids);
+        debug_assert!(self.centroids.len() <= self.config.max_centroids);
     }
 }
 
