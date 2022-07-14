@@ -1,0 +1,51 @@
+name: "Continuous integration"
+
+on:
+  push:
+  pull_request:
+
+jobs:
+
+  check:
+    name: "Check"
+    runs-on: "ubuntu-latest"
+    steps:
+    - uses: "actions/checkout@v3"
+    - uses: "dtolnay/rust-toolchain@stable"
+    - run: "cargo check"
+
+  test:
+    name: "Test"
+    runs-on: "ubuntu-latest"
+    steps:
+    - uses: "actions/checkout@v3"
+    - uses: "dtolnay/rust-toolchain@stable"
+    - run: "cargo test"
+
+  fmt:
+    name: "Fmt"
+    runs-on: "ubuntu-latest"
+    steps:
+    - uses: "actions/checkout@v3"
+    - uses: "dtolnay/rust-toolchain@stable"
+    - run: "cargo fmt --all -- --check"
+
+  clippy:
+    name: "Clippy"
+    runs-on: "ubuntu-latest"
+    steps:
+    - uses: "actions/checkout@v3"
+    - uses: "dtolnay/rust-toolchain@stable"
+    - run: "cargo clippy -- -D warnings"
+
+  doc:
+    name: "Doc"
+    runs-on: "ubuntu-latest"
+    steps:
+    - uses: "actions/checkout@v3"
+    - uses: "dtolnay/rust-toolchain@stable"
+    - run: "cargo rustdoc -- -D warnings"
+    - if: "${{ github.ref == 'refs/heads/master' }}"
+      uses: "JamesIves/github-pages-deploy-action@v4"
+      with:
+        folder: "target/doc"
