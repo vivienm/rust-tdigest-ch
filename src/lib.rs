@@ -1,4 +1,29 @@
-// Source: https://github.com/ClickHouse/ClickHouse/blob/5e34f48a181744a9f9241e3da0522eeaf9c68b84/src/AggregateFunctions/QuantileTDigest.h.
+//! Yet another Rust implementation of Ted Dunning’s [t-digest](https://github.com/tdunning/t-digest)
+//! data structures.
+//!
+//! T-digest is a data structure for approximating the quantiles of a distribution.
+//! Memory consumption is `log(n)`, where `n` is a number of values.
+//! The result depends on the order of running the query, and is nondeterministic.
+//!
+//! This implementation is heavily based on the C++ t-digest implementation in
+//! [ClickHouse](https://clickhouse.com/) ([source](https://github.com/ClickHouse/ClickHouse/blob/5e34f48a181744a9f9241e3da0522eeaf9c68b84/src/AggregateFunctions/QuantileTDigest.h)).
+//!
+//! # Examples
+//!
+//! ```
+//! use ch_tdigest::TDigest;
+//!
+//! let mut digest = TDigest::new();
+//!
+//! // Add some elements.
+//! digest.insert(1.0);
+//! digest.insert(2.0);
+//! digest.insert(3.0);
+//!
+//! // Get the median of the distribution.
+//! let quantile = digest.quantile(0.5);
+//! assert_eq!(quantile, 2.0);
+//! ```
 
 use std::{
     cmp::Ordering,
@@ -112,10 +137,7 @@ fn cmp_f32(lhs: f32, rhs: f32) -> Ordering {
     }
 }
 
-/// A histogram structure that will record a sketch of a distribution.
-///
-/// This is an implementation of Ted Dunning's [t-digest](https://github.com/tdunning/t-digest)
-/// data structure.
+/// T-digest data structure for approximating the quantiles of a distribution.
 ///
 /// # Examples
 ///
