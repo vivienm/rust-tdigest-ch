@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["TDigest","T-digest data structure for approximating the quantiles of a distribution."],["TDigestBuilder","A `TDigestBuilder` can be used to create a `TDigest` with custom configuration."]]});

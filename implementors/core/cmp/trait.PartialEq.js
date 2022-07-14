@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["ch_tdigest"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.62.0/core/cmp/trait.PartialEq.html\" title=\"trait core::cmp::PartialEq\">PartialEq</a>&lt;<a class=\"struct\" href=\"ch_tdigest/struct.TDigest.html\" title=\"struct ch_tdigest::TDigest\">TDigest</a>&gt; for <a class=\"struct\" href=\"ch_tdigest/struct.TDigest.html\" title=\"struct ch_tdigest::TDigest\">TDigest</a>","synthetic":false,"types":["ch_tdigest::TDigest"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
