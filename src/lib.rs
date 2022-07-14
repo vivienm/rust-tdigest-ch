@@ -301,16 +301,22 @@ impl TDigest {
 
     /// Creates an iterator that estimates quantiles on each level.
     ///
+    /// Levels must be sorted in ascending order.
+    ///
+    /// # Panics
+    ///
+    /// This function might panic if the iterator is not sorted.
+    ///
     /// # Examples
     ///
     /// ```
     /// use ch_tdigest::TDigest;
     ///
     /// let mut digest = TDigest::from([1.0, 2.0, 3.0, 4.0, 5.0]);
-    /// let quantiles = digest.quantiles(vec![0.0, 0.5, 1.0]);
+    /// let quantiles = digest.quantiles_sorted(vec![0.0, 0.5, 1.0]);
     /// assert_eq!(quantiles.collect::<Vec<_>>(), vec![1.0, 3.0, 5.0]);
     /// ```
-    pub fn quantiles<I>(&mut self, levels: I) -> Quantiles<I>
+    pub fn quantiles_sorted<I>(&mut self, levels: I) -> Quantiles<I>
     where
         I: IntoIterator<Item = f64>,
     {
@@ -352,6 +358,7 @@ impl TDigest {
                 current_x: 0.0,
                 c: centroid,
                 prev_c: centroid,
+                current_level: level,
                 sum: 0,
                 left: 0.0,
                 right: 0.0,
@@ -750,7 +757,11 @@ where
                 };
                 match levels.next() {
                     None => (Self::Exhausted, Some(quantile)),
+                    Some(level) if level < vars.current_level => {
+                        panic!("level out of order");
+                    }
                     Some(level) => {
+                        vars.current_level = level;
                         vars.x = level * vars.count as f64;
                         (Self::IterCentroid(levels, vars), Some(quantile))
                     }
@@ -775,6 +786,7 @@ struct QuantilesVariables<'a> {
     current_x: f64,
     c: Centroid,
     prev_c: Centroid,
+    current_level: f64,
     sum: usize,
     left: f64,
     right: f64,
