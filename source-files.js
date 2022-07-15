@@ -1,3 +1,3 @@
 var sourcesIndex = {};
-sourcesIndex["ch_tdigest"] = {"name":"","files":["lib.rs"]};
+sourcesIndex["tdigest_ch"] = {"name":"","files":["lib.rs"]};
 createSourceSidebar();

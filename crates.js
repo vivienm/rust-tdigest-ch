@@ -1,1 +1,1 @@
-window.ALL_CRATES = ["ch_tdigest"];
+window.ALL_CRATES = ["tdigest_ch"];

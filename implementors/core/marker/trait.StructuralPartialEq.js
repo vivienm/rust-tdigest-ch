@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["ch_tdigest"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.62.0/core/marker/trait.StructuralPartialEq.html\" title=\"trait core::marker::StructuralPartialEq\">StructuralPartialEq</a> for <a class=\"struct\" href=\"ch_tdigest/struct.TDigest.html\" title=\"struct ch_tdigest::TDigest\">TDigest</a>","synthetic":false,"types":["ch_tdigest::TDigest"]}];
+implementors["tdigest_ch"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.62.0/core/marker/trait.StructuralPartialEq.html\" title=\"trait core::marker::StructuralPartialEq\">StructuralPartialEq</a> for <a class=\"struct\" href=\"tdigest_ch/struct.TDigest.html\" title=\"struct tdigest_ch::TDigest\">TDigest</a>","synthetic":false,"types":["tdigest_ch::TDigest"]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
