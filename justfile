@@ -1,7 +1,7 @@
 DEFAULT: ci
 cargo := "cargo"
 
-ci: check test fmt clippy doc audit
+ci: check test fmt clippy doc deny
 
 build:
     {{cargo}} build
@@ -21,5 +21,5 @@ clippy:
 doc:
     {{cargo}} rustdoc -- -D warnings
 
-audit:
-    {{cargo}} audit
+deny:
+    {{cargo}} deny check

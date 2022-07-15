@@ -1,0 +1,7 @@
+[licenses]
+allow = [
+  "MIT",
+]
+
+[licenses.private]
+ignore = true
