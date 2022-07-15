@@ -11,7 +11,7 @@
 //! # Examples
 //!
 //! ```
-//! use ch_tdigest::TDigest;
+//! use tdigest_ch::TDigest;
 //!
 //! let mut digest = TDigest::new();
 //!
@@ -49,7 +49,7 @@ struct Config {
 /// # Examples
 ///
 /// ```
-/// use ch_tdigest::TDigestBuilder;
+/// use tdigest_ch::TDigestBuilder;
 ///
 /// let mut builder = TDigestBuilder::new();
 /// builder.max_centroids(1024);
@@ -142,7 +142,7 @@ fn cmp_f32(lhs: f32, rhs: f32) -> Ordering {
 /// # Examples
 ///
 /// ```
-/// use ch_tdigest::TDigest;
+/// use tdigest_ch::TDigest;
 ///
 /// let mut digest = TDigest::new();
 ///
@@ -169,7 +169,7 @@ impl TDigest {
     /// # Examples
     ///
     /// ```
-    /// use ch_tdigest::TDigest;
+    /// use tdigest_ch::TDigest;
     /// let digest = TDigest::new();
     /// ```
     #[must_use]
@@ -190,7 +190,7 @@ impl TDigest {
     /// # Examples
     ///
     /// ```
-    /// use ch_tdigest::TDigest;
+    /// use tdigest_ch::TDigest;
     ///
     /// let mut a = TDigest::from([-10.0, 1.0, 2.0, 2.0, 3.0]);
     /// let mut b = TDigest::from([-20.0, 5.0, 43.0]);
@@ -210,7 +210,7 @@ impl TDigest {
     /// # Examples
     ///
     /// ```
-    /// use ch_tdigest::TDigest;
+    /// use tdigest_ch::TDigest;
     ///
     /// let mut digest = TDigest::new();
     /// assert_eq!(digest.len(), 0);
@@ -227,7 +227,7 @@ impl TDigest {
     /// # Examples
     ///
     /// ```
-    /// use ch_tdigest::TDigest;
+    /// use tdigest_ch::TDigest;
     ///
     /// let mut digest = TDigest::new();
     /// assert!(digest.is_empty());
@@ -244,7 +244,7 @@ impl TDigest {
     /// # Examples
     ///
     /// ```
-    /// use ch_tdigest::TDigest;
+    /// use tdigest_ch::TDigest;
     ///
     /// let mut digest = TDigest::new();
     /// digest.insert(1.0);
@@ -262,7 +262,7 @@ impl TDigest {
     /// # Examples
     ///
     /// ```
-    /// use ch_tdigest::TDigest;
+    /// use tdigest_ch::TDigest;
     ///
     /// let mut digest = TDigest::from([1.0, 2.0, 3.0, 4.0, 5.0]);
     /// assert_eq!(digest.quantile(0.0), 1.0);
@@ -325,7 +325,7 @@ impl TDigest {
     /// # Examples
     ///
     /// ```
-    /// use ch_tdigest::TDigest;
+    /// use tdigest_ch::TDigest;
     ///
     /// let mut digest = TDigest::new();
     ///
@@ -343,7 +343,7 @@ impl TDigest {
     /// # Examples
     ///
     /// ```
-    /// use ch_tdigest::TDigest;
+    /// use tdigest_ch::TDigest;
     ///
     /// let mut digest = TDigest::new();
     ///
@@ -530,7 +530,7 @@ impl BitOr<&TDigest> for &TDigest {
     /// # Examples
     ///
     /// ```
-    /// use ch_tdigest::TDigest;
+    /// use tdigest_ch::TDigest;
     ///
     /// let a = TDigest::from([1.0, 2.0, 3.0]);
     /// let b = TDigest::from([3.0, 4.0, 5.0]);
@@ -553,7 +553,7 @@ impl BitOrAssign<&TDigest> for TDigest {
     /// # Examples
     ///
     /// ```
-    /// use ch_tdigest::TDigest;
+    /// use tdigest_ch::TDigest;
     ///
     /// let mut a = TDigest::from([1.0, 2.0, 3.0]);
     /// let b = TDigest::from([3.0, 4.0, 5.0]);
@@ -589,7 +589,7 @@ impl<const N: usize> From<[f32; N]> for TDigest {
     /// # Examples
     ///
     /// ```
-    /// use ch_tdigest::TDigest;
+    /// use tdigest_ch::TDigest;
     ///
     /// let digest1 = TDigest::from([1.0, 2.0, 3.0, 4.0]);
     /// let digest2: TDigest = [1.0, 2.0, 3.0, 4.0].into();

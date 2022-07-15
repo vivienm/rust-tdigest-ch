@@ -1,7 +1,7 @@
 // Source: https://github.com/CamDavidsonPilon/tdigest/blob/master/tests/test_tdigest.py
 
-use ch_tdigest::TDigest;
 use rand::Rng;
+use tdigest_ch::TDigest;
 
 #[test]
 fn uniform() {

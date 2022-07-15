@@ -1,4 +1,4 @@
-use ch_tdigest::TDigest;
+use tdigest_ch::TDigest;
 
 #[test]
 fn example() {

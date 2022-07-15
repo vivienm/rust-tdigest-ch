@@ -1,6 +1,6 @@
 // Source: https://github.com/snaury/tdigest-go/blob/master/tdigest_test.go.
 
-use ch_tdigest::TDigest;
+use tdigest_ch::TDigest;
 
 #[test]
 fn digest_10() {
