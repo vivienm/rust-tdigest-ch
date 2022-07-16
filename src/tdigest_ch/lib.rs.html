@@ -616,6 +616,71 @@
 <span id="611">611</span>
 <span id="612">612</span>
 <span id="613">613</span>
+<span id="614">614</span>
+<span id="615">615</span>
+<span id="616">616</span>
+<span id="617">617</span>
+<span id="618">618</span>
+<span id="619">619</span>
+<span id="620">620</span>
+<span id="621">621</span>
+<span id="622">622</span>
+<span id="623">623</span>
+<span id="624">624</span>
+<span id="625">625</span>
+<span id="626">626</span>
+<span id="627">627</span>
+<span id="628">628</span>
+<span id="629">629</span>
+<span id="630">630</span>
+<span id="631">631</span>
+<span id="632">632</span>
+<span id="633">633</span>
+<span id="634">634</span>
+<span id="635">635</span>
+<span id="636">636</span>
+<span id="637">637</span>
+<span id="638">638</span>
+<span id="639">639</span>
+<span id="640">640</span>
+<span id="641">641</span>
+<span id="642">642</span>
+<span id="643">643</span>
+<span id="644">644</span>
+<span id="645">645</span>
+<span id="646">646</span>
+<span id="647">647</span>
+<span id="648">648</span>
+<span id="649">649</span>
+<span id="650">650</span>
+<span id="651">651</span>
+<span id="652">652</span>
+<span id="653">653</span>
+<span id="654">654</span>
+<span id="655">655</span>
+<span id="656">656</span>
+<span id="657">657</span>
+<span id="658">658</span>
+<span id="659">659</span>
+<span id="660">660</span>
+<span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
+<span id="664">664</span>
+<span id="665">665</span>
+<span id="666">666</span>
+<span id="667">667</span>
+<span id="668">668</span>
+<span id="669">669</span>
+<span id="670">670</span>
+<span id="671">671</span>
+<span id="672">672</span>
+<span id="673">673</span>
+<span id="674">674</span>
+<span id="675">675</span>
+<span id="676">676</span>
+<span id="677">677</span>
+<span id="678">678</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Yet another Rust implementation of Ted Dunning’s [t-digest](https://github.com/tdunning/t-digest)</span>
 <span class="doccomment">//! data structures.</span>
 <span class="doccomment">//!</span>
@@ -875,7 +940,11 @@
         <span class="self">self</span>.<span class="ident">unmerged</span> <span class="op">=</span> <span class="number">0</span>;
     }
 
-    <span class="doccomment">/// Return the estimated quantile of the t-digest.</span>
+    <span class="doccomment">/// Returns the estimated quantile of the t-digest.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This method expects `self` to be mutable, since the t-digest may be compressed.</span>
+    <span class="doccomment">/// If you require an immutable, shared reference to compute quantiles, consider using</span>
+    <span class="doccomment">/// `quantiles` instead.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
@@ -888,13 +957,16 @@
     <span class="doccomment">/// assert_eq!(digest.quantile(1.0), 5.0);</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">quantile</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">level</span>: <span class="ident">f64</span>) -&gt; <span class="ident">f32</span> {
+        <span class="self">self</span>.<span class="ident">compress</span>();
+        <span class="self">self</span>.<span class="ident">quantile_uncompressed</span>(<span class="ident">level</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">quantile_uncompressed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">level</span>: <span class="ident">f64</span>) -&gt; <span class="ident">f32</span> {
         <span class="comment">// Calculates the quantile q [0, 1] based on the digest.</span>
         <span class="comment">// For an empty digest returns NaN.</span>
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">centroids</span>.<span class="ident">is_empty</span>() {
             <span class="kw">return</span> <span class="ident">f32::NAN</span>;
         }
-
-        <span class="self">self</span>.<span class="ident">compress</span>();
 
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">centroids</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="number">1</span> {
             <span class="kw">return</span> <span class="self">self</span>.<span class="ident">centroids</span>[<span class="number">0</span>].<span class="ident">mean</span>;
@@ -936,6 +1008,35 @@
         }
 
         <span class="self">self</span>.<span class="ident">centroids</span>.<span class="ident">last</span>().<span class="ident">unwrap</span>().<span class="ident">mean</span>
+    }
+
+    <span class="doccomment">/// Creates an immutable quantile estimator from the t-digest.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// use std::thread;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// use tdigest_ch::TDigest;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// let mut digest = TDigest::from([1.0, 2.0, 3.0, 4.0, 5.0]);</span>
+    <span class="doccomment">/// let quantiles = digest.quantiles();</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// thread::scope(|s| {</span>
+    <span class="doccomment">///     s.spawn(|| {</span>
+    <span class="doccomment">///         assert_eq!(quantiles.get(0.0), 1.0);</span>
+    <span class="doccomment">///     });</span>
+    <span class="doccomment">///     s.spawn(|| {</span>
+    <span class="doccomment">///         assert_eq!(quantiles.get(0.5), 3.0);</span>
+    <span class="doccomment">///     });</span>
+    <span class="doccomment">///     s.spawn(|| {</span>
+    <span class="doccomment">///         assert_eq!(quantiles.get(1.0), 5.0);</span>
+    <span class="doccomment">///     });</span>
+    <span class="doccomment">/// });</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">quantiles</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">Quantiles</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">compress</span>();
+        <span class="ident">Quantiles</span> { <span class="ident">digest</span>: <span class="self">self</span> }
     }
 
     <span class="doccomment">/// Adds a value to the t-digest.</span>
@@ -1227,6 +1328,35 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">digest</span> <span class="op">=</span> <span class="ident">TDigest::new</span>();
         <span class="ident">digest</span>.<span class="ident">extend</span>(<span class="ident">iter</span>);
         <span class="ident">digest</span>
+    }
+}
+
+<span class="doccomment">/// Estimates quantiles of a t-digest.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This `struct` is created by the [`quantiles`] method on [`TDigest`]. See its documentation for</span>
+<span class="doccomment">/// more.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [`quantiles`]: TDigest::quantiles</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Quantiles</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="ident">digest</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">TDigest</span>,
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Quantiles</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Returns the estimated quantile of the t-digest.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// use tdigest_ch::TDigest;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// let mut digest = TDigest::from([1.0, 2.0, 3.0, 4.0, 5.0]);</span>
+    <span class="doccomment">/// let quantiles = digest.quantiles();</span>
+    <span class="doccomment">/// assert_eq!(quantiles.get(0.0), 1.0);</span>
+    <span class="doccomment">/// assert_eq!(quantiles.get(0.5), 3.0);</span>
+    <span class="doccomment">/// assert_eq!(quantiles.get(1.0), 5.0);</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">level</span>: <span class="ident">f64</span>) -&gt; <span class="ident">f32</span> {
+        <span class="self">self</span>.<span class="ident">digest</span>.<span class="ident">quantile_uncompressed</span>(<span class="ident">level</span>)
     }
 }
 </code></pre></div>
