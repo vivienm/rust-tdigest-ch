@@ -10,7 +10,7 @@ check:
     {{cargo}} check
 
 test:
-    {{cargo}} test
+    {{cargo}} +nightly test
 
 fmt:
     {{cargo}} fmt --all -- --check

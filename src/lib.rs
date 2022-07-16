@@ -274,13 +274,16 @@ impl TDigest {
     /// assert_eq!(digest.quantile(1.0), 5.0);
     /// ```
     pub fn quantile(&mut self, level: f64) -> f32 {
+        self.compress();
+        self.quantile_uncompressed(level)
+    }
+
+    fn quantile_uncompressed(&self, level: f64) -> f32 {
         // Calculates the quantile q [0, 1] based on the digest.
         // For an empty digest returns NaN.
         if self.centroids.is_empty() {
             return f32::NAN;
         }
-
-        self.compress();
 
         if self.centroids.len() == 1 {
             return self.centroids[0].mean;
@@ -322,6 +325,35 @@ impl TDigest {
         }
 
         self.centroids.last().unwrap().mean
+    }
+
+    /// Creates an immutable quantile estimator from the t-digest.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use std::thread;
+    ///
+    /// use tdigest_ch::TDigest;
+    ///
+    /// let mut digest = TDigest::from([1.0, 2.0, 3.0, 4.0, 5.0]);
+    /// let quantiles = digest.quantiles();
+    ///
+    /// thread::scope(|s| {
+    ///     s.spawn(|| {
+    ///         assert_eq!(quantiles.get(0.0), 1.0);
+    ///     });
+    ///     s.spawn(|| {
+    ///         assert_eq!(quantiles.get(0.5), 3.0);
+    ///     });
+    ///     s.spawn(|| {
+    ///         assert_eq!(quantiles.get(1.0), 5.0);
+    ///     });
+    /// });
+    /// ```
+    pub fn quantiles(&mut self) -> Quantiles<'_> {
+        self.compress();
+        Quantiles { digest: self }
     }
 
     /// Adds a value to the t-digest.
@@ -613,5 +645,34 @@ impl FromIterator<f32> for TDigest {
         let mut digest = TDigest::new();
         digest.extend(iter);
         digest
+    }
+}
+
+/// Estimates quantiles of a t-digest.
+///
+/// This `struct` is created by the [`quantiles`] method on [`TDigest`]. See its documentation for
+/// more.
+///
+/// [`quantiles`]: TDigest::quantiles
+pub struct Quantiles<'a> {
+    digest: &'a TDigest,
+}
+
+impl<'a> Quantiles<'a> {
+    /// Returns the estimated quantile of the t-digest.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use tdigest_ch::TDigest;
+    ///
+    /// let mut digest = TDigest::from([1.0, 2.0, 3.0, 4.0, 5.0]);
+    /// let quantiles = digest.quantiles();
+    /// assert_eq!(quantiles.get(0.0), 1.0);
+    /// assert_eq!(quantiles.get(0.5), 3.0);
+    /// assert_eq!(quantiles.get(1.0), 5.0);
+    /// ```
+    pub fn get(&self, level: f64) -> f32 {
+        self.digest.quantile_uncompressed(level)
     }
 }
