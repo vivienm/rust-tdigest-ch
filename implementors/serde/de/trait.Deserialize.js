@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["tdigest_ch"] = [{"text":"impl&lt;'de&gt; <a class=\"trait\" href=\"https://docs.rs/serde/1.0.139/serde/de/trait.Deserialize.html\" title=\"trait serde::de::Deserialize\">Deserialize</a>&lt;'de&gt; for <a class=\"struct\" href=\"tdigest_ch/struct.TDigest.html\" title=\"struct tdigest_ch::TDigest\">TDigest</a>","synthetic":false,"types":["tdigest_ch::TDigest"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
