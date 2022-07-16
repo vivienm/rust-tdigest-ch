@@ -7,9 +7,12 @@ The [t-digest][tdigest-paper] data structure is designed around computing
 accurate quantile estimates from streaming data. Two t-digests can be merged,
 making the data structure ideal for map-reduce settings.
 
+[API documentation][api-docs]
+
 [tdigest-paper]: https://github.com/tdunning/t-digest/blob/main/docs/t-digest-paper/histo.pdf
 [ch-tdigest]: https://clickhouse.com/docs/en/sql-reference/aggregate-functions/reference/quantiletdigest/
 [ch-tdigest-src]: https://github.com/ClickHouse/ClickHouse/blob/5e34f48a181744a9f9241e3da0522eeaf9c68b84/src/AggregateFunctions/QuantileTDigest.h
+[api-docs]: https://vivienm.github.io/rust-tdigest-ch/tdigest_ch/
 
 ## Example
 
