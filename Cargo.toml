@@ -8,6 +8,11 @@ repository = "https://github.com/vivienm/rust-tdigest-ch"
 license = "MIT"
 
 [dependencies]
+serde = { version = "1.0.139", features = ["derive"], optional = true }
 
 [dev-dependencies]
 rand = "0.8.5"
+serde_json = "1.0.82"
+
+[features]
+serde = ["dep:serde"]

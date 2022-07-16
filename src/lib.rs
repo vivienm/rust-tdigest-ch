@@ -25,6 +25,7 @@
 //! let quantile = digest.quantile(0.5);
 //! assert_eq!(quantile, 2.0);
 //! ```
+#![cfg_attr(doc, feature(doc_auto_cfg))]
 
 use std::{
     cmp::Ordering,
@@ -38,11 +39,67 @@ struct Centroid {
     count: usize,
 }
 
+#[cfg(feature = "serde")]
+impl serde::Serialize for Centroid {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        (self.mean, self.count).serialize(serializer)
+    }
+}
+
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for Centroid {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let (mean, count) = serde::Deserialize::deserialize(deserializer)?;
+        Ok(Self { mean, count })
+    }
+}
+
 #[derive(Clone, Debug, PartialEq)]
 struct Config {
     epsilon: f32,
     max_centroids: usize,
     max_unmerged: usize,
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            epsilon: 0.01,
+            max_centroids: 2048,
+            max_unmerged: 2048,
+        }
+    }
+}
+
+#[cfg(feature = "serde")]
+impl serde::Serialize for Config {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        (self.epsilon, self.max_centroids, self.max_unmerged).serialize(serializer)
+    }
+}
+
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for Config {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let (epsilon, max_centroids, max_unmerged) = serde::Deserialize::deserialize(deserializer)?;
+        Ok(Self {
+            epsilon,
+            max_centroids,
+            max_unmerged,
+        })
+    }
 }
 
 /// A `TDigestBuilder` can be used to create a `TDigest` with custom configuration.
@@ -69,11 +126,7 @@ impl TDigestBuilder {
     /// This is the same as `TDigest::builder()`.
     pub fn new() -> Self {
         Self {
-            config: Config {
-                epsilon: 0.01,
-                max_centroids: 2048,
-                max_unmerged: 2048,
-            },
+            config: Config::default(),
         }
     }
 
@@ -646,6 +699,32 @@ impl FromIterator<f32> for TDigest {
         let mut digest = TDigest::new();
         digest.extend(iter);
         digest
+    }
+}
+
+#[cfg(feature = "serde")]
+impl serde::Serialize for TDigest {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        (&self.config, &self.centroids, self.count, self.unmerged).serialize(serializer)
+    }
+}
+
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for TDigest {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let (config, centroids, count, unmerged) = serde::Deserialize::deserialize(deserializer)?;
+        Ok(Self {
+            config,
+            centroids,
+            count,
+            unmerged,
+        })
     }
 }
 
