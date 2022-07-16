@@ -257,7 +257,11 @@ impl TDigest {
         self.unmerged = 0;
     }
 
-    /// Return the estimated quantile of the t-digest.
+    /// Returns the estimated quantile of the t-digest.
+    ///
+    /// This method expects `self` to be mutable, since the t-digest may be compressed.
+    /// If you require an immutable, shared reference to compute quantiles, consider using
+    /// `quantiles` instead.
     ///
     /// # Examples
     ///
