@@ -1,12 +1,9 @@
-//! Yet another Rust implementation of Ted Dunning’s [t-digest](https://github.com/tdunning/t-digest)
-//! data structures.
+//! A Rust implementation of [ClickHouse t-digest][ch-tdigest] data structure
+//! ([source][ch-tdigest-src]).
 //!
-//! T-digest is a data structure for approximating the quantiles of a distribution.
-//! Memory consumption is `log(n)`, where `n` is a number of values.
-//! The result depends on the order of running the query, and is nondeterministic.
-//!
-//! This implementation is heavily based on the C++ t-digest implementation in
-//! [ClickHouse](https://clickhouse.com/) ([source](https://github.com/ClickHouse/ClickHouse/blob/5e34f48a181744a9f9241e3da0522eeaf9c68b84/src/AggregateFunctions/QuantileTDigest.h)).
+//! The [t-digest][tdigest-paper] data structure is designed around computing accurate quantile
+//! estimates from streaming data. Two t-digests can be merged, making the data structure ideal for
+//! map-reduce settings.
 //!
 //! # Examples
 //!
@@ -24,6 +21,10 @@
 //! let quantile = digest.quantile(0.5);
 //! assert_eq!(quantile, 2.0);
 //! ```
+//!
+//! [tdigest-paper]: <https://github.com/tdunning/t-digest/blob/main/docs/t-digest-paper/histo.pdf>
+//! [ch-tdigest]: <https://clickhouse.com/docs/en/sql-reference/aggregate-functions/reference/quantiletdigest/>
+//! [ch-tdigest-src]: <https://github.com/ClickHouse/ClickHouse/blob/5e34f48a181744a9f9241e3da0522eeaf9c68b84/src/AggregateFunctions/QuantileTDigest.h>
 
 use std::{
     cmp::Ordering,
