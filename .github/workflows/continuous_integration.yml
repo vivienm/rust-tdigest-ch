@@ -10,7 +10,7 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
     - uses: "actions/checkout@v3"
-    - uses: "dtolnay/rust-toolchain@stable"
+    - uses: "dtolnay/rust-toolchain@nightly"
     - run: "cargo check --all-features"
 
   test:
@@ -26,7 +26,9 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
     - uses: "actions/checkout@v3"
-    - uses: "dtolnay/rust-toolchain@stable"
+    - uses: "dtolnay/rust-toolchain@nightly"
+      with:
+        components: "rustfmt"
     - run: "cargo fmt --all -- --check"
 
   clippy:
@@ -34,7 +36,9 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
     - uses: "actions/checkout@v3"
-    - uses: "dtolnay/rust-toolchain@stable"
+    - uses: "dtolnay/rust-toolchain@nightly"
+      with:
+        components: "clippy"
     - run: "cargo clippy -- -D warnings"
 
   doc:

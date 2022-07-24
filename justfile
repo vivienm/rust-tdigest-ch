@@ -10,7 +10,7 @@ check:
     {{cargo}} check --all-features
 
 test:
-    {{cargo}} +nightly test --all-features
+    {{cargo}} test --all-features
 
 fmt:
     {{cargo}} fmt --all -- --check
@@ -19,7 +19,7 @@ clippy:
     {{cargo}} clippy -- -D warnings
 
 doc:
-    {{cargo}} +nightly rustdoc --all-features -- -D warnings
+    {{cargo}} rustdoc --all-features -- -D warnings
 
 deny:
     {{cargo}} deny --all-features check
