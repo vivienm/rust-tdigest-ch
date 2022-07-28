@@ -2,9 +2,8 @@
 name = "tdigest-ch"
 version = "0.1.0"
 edition = "2021"
-description = "A Rust implementation of ClickHouse t-digest data structure"
-documentation = "https://vivienm.github.io/rust-tdigest-ch/tdigest_ch/"
-repository = "https://github.com/vivienm/rust-tdigest-ch"
+description = "A Rust implementation of ClickHouse t-digest data structure."
+repository = "https://github.com/vivienm/rust-tdigest-ch/"
 license = "MIT"
 
 [dependencies]

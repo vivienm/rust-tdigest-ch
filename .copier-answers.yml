@@ -1,0 +1,15 @@
+# Changes here will be overwritten by Copier. NEVER EDIT MANUALLY.
+
+_commit: 242b667
+_src_path: gh:vivienm/copier-rust
+author_fullname: Vivien Maisonneuve
+copyright_date: '2022'
+copyright_holder: Vivien Maisonneuve
+copyright_license: MIT
+package_name: tdigest-ch
+project_description: A Rust implementation of ClickHouse t-digest data structure.
+project_name: tdigest-ch
+project_type: lib
+repository_name: rust-tdigest-ch
+repository_namespace: vivienm
+repository_provider: github.com
