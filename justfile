@@ -1,4 +1,4 @@
-DEFAULT: check test fmt clippy doc deny
+DEFAULT: check test fmt clippy doc typos deny
 
 build:
     cargo build --all-features
@@ -17,6 +17,9 @@ clippy:
 
 doc:
     cargo rustdoc --all-features -- -D warnings
+
+typos:
+    typos
 
 deny:
     cargo deny --all-features check
