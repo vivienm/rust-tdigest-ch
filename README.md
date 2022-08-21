@@ -5,7 +5,7 @@ structure ([source][ClickHouseSrcTDigest]).
 
 The [t-digest][Dunning19] data structure is designed around computing
 accurate quantile estimates from streaming data. Two t-digests can be merged,
-making the data structure ideal for map-reduce settings.
+making the data structure well suited for map-reduce settings.
 
 [Repository] | [Documentation]
 
