@@ -1,3 +1,5 @@
+#![cfg(feature = "serde")]
+
 use tdigest_ch::TDigest;
 
 #[test]
