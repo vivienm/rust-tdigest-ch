@@ -9,71 +9,40 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check:
-    name: "Check"
-    runs-on: "ubuntu-latest"
-    steps:
-    - uses: "actions/checkout@v3"
-    - uses: "dtolnay/rust-toolchain@nightly"
-    - run: "cargo check --all-features"
-
-  test:
-    name: "Test"
-    runs-on: "ubuntu-latest"
-    steps:
-    - uses: "actions/checkout@v3"
-    - uses: "dtolnay/rust-toolchain@nightly"
-    - run: "cargo test --all-features"
-
-  fmt:
-    name: "Fmt"
+  tests:
     runs-on: "ubuntu-latest"
     steps:
     - uses: "actions/checkout@v3"
     - uses: "dtolnay/rust-toolchain@nightly"
       with:
-        components: "rustfmt"
-    - run: "cargo fmt --all -- --check"
-
-  clippy:
-    name: "Clippy"
-    runs-on: "ubuntu-latest"
-    steps:
-    - uses: "actions/checkout@v3"
-    - uses: "dtolnay/rust-toolchain@nightly"
+        components: "clippy, rustfmt"
+    - uses: "actions/cache@v3"
       with:
-        components: "clippy"
-    - run: "cargo clippy -- -D warnings"
-
-  doc:
-    name: "Doc"
-    runs-on: "ubuntu-latest"
-    steps:
-    - uses: "actions/checkout@v3"
-    - uses: "dtolnay/rust-toolchain@nightly"
-    - run: "cargo rustdoc --all-features -- -D warnings"
-    - if: "github.ref == format('refs/heads/{0}', github.event.repository.default_branch)"
-      uses: "actions/upload-pages-artifact@v1"
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          ~/.cargo/.crates.toml
+          ~/.cargo/.crates2.json
+          target/
+        key: "${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}"
+        restore-keys: |
+          ${{ runner.os }}-cargo-
+    - run: "cargo install just cargo-hack cargo-deny typos-cli"
+    - run: "just"
+      env:
+        RUSTFLAGS: "-D warnings"
+        RUSTDOCFLAGS: "-D warnings"
+    - uses: "actions/upload-artifact@v3"
       with:
+        name: "doc"
         path: "./target/doc"
-
-  typos:
-    name: "Typos"
-    runs-on: "ubuntu-latest"
-    steps:
-    - uses: "actions/checkout@v3"
-    - uses: crate-ci/typos@master
-
-  deny:
-    name: "Deny"
-    runs-on: "ubuntu-latest"
-    steps:
-    - uses: "actions/checkout@v3"
-    - uses: "EmbarkStudios/cargo-deny-action@v1"
+        retention-days: 7
 
   pages:
     if: "github.ref == format('refs/heads/{0}', github.event.repository.default_branch)"
-    needs: "doc"
+    needs: "tests"
     permissions:
       pages: "write"
       id-token: "write"
@@ -82,5 +51,12 @@ jobs:
       url: "${{ steps.deployment.outputs.page_url }}"
     runs-on: "ubuntu-latest"
     steps:
+    - uses: "actions/download-artifact@v3"
+      with:
+        name: "doc"
+        path: "${{ runner.temp }}/pages/docs"
+    - uses: "actions/upload-pages-artifact@v1"
+      with:
+        path: "${{ runner.temp }}/pages"
     - id: "deployment"
       uses: "actions/deploy-pages@v1"

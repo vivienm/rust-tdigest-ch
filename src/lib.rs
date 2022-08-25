@@ -1,13 +1,17 @@
+#![cfg_attr(doc, feature(doc_auto_cfg))]
+
 //! A Rust library for estimating quantiles in a stream,
 //! using [ClickHouse t-digest][ClickHouseRefTDigest] data structure.
 //!
 //! The [t-digest][Dunning19] data structure is designed around computing
 //! accurate quantile estimates from streaming data. Two t-digests can be merged,
 //! making the data structure well suited for map-reduce settings.
-
+//!
+//! [Repository]
 //!
 //! [ClickHouseRefTDigest]: https://clickhouse.com/docs/en/sql-reference/aggregate-functions/reference/quantiletdigest/
 //! [Dunning19]: https://github.com/tdunning/t-digest/blob/main/docs/t-digest-paper/histo.pdf
+//! [Repository]: https://github.com/vivienm/rust-tdigest-ch
 //!
 //! # Examples
 //!
@@ -25,7 +29,6 @@
 //! let quantile = digest.quantile(0.5);
 //! assert_eq!(quantile, 2.0);
 //! ```
-#![cfg_attr(doc, feature(doc_auto_cfg))]
 
 use std::{
     cmp::Ordering,

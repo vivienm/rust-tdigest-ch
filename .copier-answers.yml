@@ -1,6 +1,6 @@
 # Changes here will be overwritten by Copier. NEVER EDIT MANUALLY.
 
-_commit: a557348
+_commit: 43967a2
 _src_path: gh:vivienm/copier-rust
 author_fullname: Vivien Maisonneuve
 copyright_date: '2022'
@@ -8,10 +8,14 @@ copyright_holder: Vivien Maisonneuve
 copyright_license: MIT
 package_name: tdigest-ch
 pages_enabled: true
+pages_provider: github.io
+pages_url: https://vivienm.github.io/rust-tdigest-ch
 project_description: A Rust library for estimating quantiles in a stream, using ClickHouse
     t-digest data structure.
 project_name: tdigest-ch
 project_type: lib
+repository_hosted: true
 repository_name: rust-tdigest-ch
 repository_namespace: vivienm
 repository_provider: github.com
+repository_url: https://github.com/vivienm/rust-tdigest-ch

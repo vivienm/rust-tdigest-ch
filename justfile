@@ -1,25 +1,25 @@
-DEFAULT: check test fmt clippy doc typos deny
-
-build:
-    cargo build --all-features
-
-check:
-    cargo check --all-features
-
-test:
-    cargo test --all-features
+DEFAULT: fmt check test clippy doc deny typos
 
 fmt:
-    cargo fmt --all -- --check
+    cargo fmt --check
 
-clippy:
-    cargo clippy -- -D warnings
+build *args="":
+    cargo build --all-features {{args}}
 
-doc:
-    cargo rustdoc --all-features -- -D warnings
+check:
+    cargo hack --feature-powerset check --all-targets
 
-typos:
-    typos
+test *args="":
+    cargo test --all-features {{args}}
+
+clippy *args="":
+    cargo clippy {{args}}
+
+doc *args="":
+    cargo doc --no-deps --all-features {{args}}
 
 deny:
     cargo deny --all-features check
+
+typos:
+    typos
