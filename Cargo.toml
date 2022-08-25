@@ -2,7 +2,7 @@
 name = "tdigest-ch"
 version = "0.1.0"
 edition = "2021"
-description = "A Rust implementation of ClickHouse t-digest data structure."
+description = "A Rust library for estimating quantiles in a stream, using ClickHouse t-digest data structure."
 repository = "https://github.com/vivienm/rust-tdigest-ch/"
 documentation = "https://vivienm.github.io/rust-tdigest-ch/tdigest_ch/"
 license = "MIT"

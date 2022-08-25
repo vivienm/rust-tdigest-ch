@@ -8,7 +8,8 @@ copyright_holder: Vivien Maisonneuve
 copyright_license: MIT
 package_name: tdigest-ch
 pages_enabled: true
-project_description: A Rust implementation of ClickHouse t-digest data structure.
+project_description: A Rust library for estimating quantiles in a stream, using ClickHouse
+    t-digest data structure.
 project_name: tdigest-ch
 project_type: lib
 repository_name: rust-tdigest-ch
