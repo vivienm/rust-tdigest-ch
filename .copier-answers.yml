@@ -1,6 +1,6 @@
 # Changes here will be overwritten by Copier. NEVER EDIT MANUALLY.
 
-_commit: 43967a2
+_commit: 67d9c38
 _src_path: gh:vivienm/copier-rust
 author_fullname: Vivien Maisonneuve
 copyright_date: '2022'
@@ -19,3 +19,4 @@ repository_name: rust-tdigest-ch
 repository_namespace: vivienm
 repository_provider: github.com
 repository_url: https://github.com/vivienm/rust-tdigest-ch
+rust_toolchain: nightly
