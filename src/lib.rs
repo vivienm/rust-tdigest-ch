@@ -4,8 +4,8 @@
 //! using [ClickHouse t-digest][ClickHouseRefTDigest] data structure.
 //!
 //! The [t-digest][Dunning19] data structure is designed around computing
-//! accurate quantile estimates from streaming data. Two t-digests can be merged,
-//! making the data structure well suited for map-reduce settings.
+//! accurate quantile estimates from streaming data. Two t-digests can be
+//! merged, making the data structure well suited for map-reduce settings.
 //!
 //! [Repository]
 //!
@@ -105,7 +105,8 @@ impl<'de> serde::Deserialize<'de> for Config {
     }
 }
 
-/// A `TDigestBuilder` can be used to create a `TDigest` with custom configuration.
+/// A `TDigestBuilder` can be used to create a `TDigest` with custom
+/// configuration.
 ///
 /// # Examples
 ///
@@ -316,9 +317,9 @@ impl TDigest {
 
     /// Returns the estimated quantile of the t-digest.
     ///
-    /// This method expects `self` to be mutable, since the t-digest may be compressed.
-    /// If you require an immutable, shared reference to compute quantiles, consider using
-    /// `quantiles` instead.
+    /// This method expects `self` to be mutable, since the t-digest may be
+    /// compressed. If you require an immutable, shared reference to compute
+    /// quantiles, consider using `quantiles` instead.
     ///
     /// # Examples
     ///
@@ -446,7 +447,8 @@ impl TDigest {
     /// ```
     pub fn insert_many(&mut self, value: f32, count: usize) {
         if count == 0 || value.is_nan() {
-            // Count 0 breaks compress() assumptions, NaN breaks sort(). We treat them as no sample.
+            // Count 0 breaks compress() assumptions, NaN breaks sort(). We treat them as no
+            // sample.
             return;
         }
         self.insert_centroid(&Centroid { mean: value, count });
@@ -463,8 +465,8 @@ impl TDigest {
 
     fn compress(&mut self) {
         // Performs compression of accumulated centroids
-        // When merging, the invariant is retained to the maximum size of each centroid that does
-        // not exceed `4 q (1 - q) \ delta N`.
+        // When merging, the invariant is retained to the maximum size of each centroid
+        // that does not exceed `4 q (1 - q) \ delta N`.
         if self.unmerged > 0 || self.centroids.len() > self.config.max_centroids {
             self.centroids.sort_by(|l, r| cmp_f32(l.mean, r.mean));
 
@@ -479,12 +481,12 @@ impl TDigest {
             };
             for r_index in 1..self.centroids.len() {
                 let r = self.centroids[r_index];
-                // N.B. We cannot merge all the same values into single centroids because this will
-                // lead to unbalanced compression and wrong results.
+                // N.B. We cannot merge all the same values into single centroids because this
+                // will lead to unbalanced compression and wrong results.
                 // For more information see: https://arxiv.org/abs/1902.04023.
 
-                // The ratio of the part of the histogram to l, including the half l to the entire
-                // histogram. That is, what level quantile in position l.
+                // The ratio of the part of the histogram to l, including the half l to the
+                // entire histogram. That is, what level quantile in position l.
                 let ql = (sum as f64 + l_count as f64 * 0.5) / self.count as f64;
                 let mut err = ql * (1. - ql);
 
@@ -499,9 +501,10 @@ impl TDigest {
 
                 let k = count_epsilon_4 * err;
 
-                // The ratio of the weight of the glued column pair to all values is not greater,
-                // than epsilon multiply by a certain quadratic coefficient, which in the median is
-                // 1 (4 * 1/2 * 1/2), and at the edges decreases and is approximately equal to the
+                // The ratio of the weight of the glued column pair to all values is not
+                // greater, than epsilon multiply by a certain quadratic
+                // coefficient, which in the median is 1 (4 * 1/2 * 1/2), and at
+                // the edges decreases and is approximately equal to the
                 // distance to the edge * 4.
 
                 if l_count as f64 + r.count as f64 <= k && can_be_merged(l_mean, r.mean) {
@@ -542,8 +545,8 @@ impl TDigest {
             self.unmerged = 0;
         }
 
-        // Ensures centroids.size() < max_centroids, independent of unprovable floating point
-        // blackbox above.
+        // Ensures centroids.size() < max_centroids, independent of unprovable floating
+        // point blackbox above.
         self.compress_brute();
     }
 
@@ -733,8 +736,8 @@ impl<'de> serde::Deserialize<'de> for TDigest {
 
 /// Estimates quantiles of a t-digest.
 ///
-/// This `struct` is created by the [`quantiles`] method on [`TDigest`]. See its documentation for
-/// more.
+/// This `struct` is created by the [`quantiles`] method on [`TDigest`]. See its
+/// documentation for more.
 ///
 /// [`quantiles`]: TDigest::quantiles
 pub struct Quantiles<'a> {
