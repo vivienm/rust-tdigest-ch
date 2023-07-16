@@ -146,16 +146,21 @@ impl TDigestBuilder {
         }
     }
 
+    /// Sets the compression parameter of the `TDigest`. Defaults to 0.01.
     pub fn epsilon(&mut self, epsilon: f32) -> &mut Self {
         self.config.epsilon = epsilon;
         self
     }
 
+    /// Sets the maximum number of centroids that the `TDigest` will store.
+    /// Defaults to 2048.
     pub fn max_centroids(&mut self, max_centroids: usize) -> &mut Self {
         self.config.max_centroids = max_centroids;
         self
     }
 
+    /// Sets the maximum number of unmerged centroids that the `TDigest` will
+    /// store. Defaults to 2048.
     pub fn max_unmerged(&mut self, max_unmerged: usize) -> &mut Self {
         self.config.max_unmerged = max_unmerged;
         self
