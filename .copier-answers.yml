@@ -1,11 +1,11 @@
 # Changes here will be overwritten by Copier. NEVER EDIT MANUALLY.
 
-_commit: 67d9c38
+_commit: 276a4c1
 _src_path: gh:vivienm/copier-rust
 author_fullname: Vivien Maisonneuve
-copyright_date: '2022'
 copyright_holder: Vivien Maisonneuve
 copyright_license: MIT
+copyright_year: 2022
 package_name: tdigest-ch
 pages_enabled: true
 pages_provider: github.io
