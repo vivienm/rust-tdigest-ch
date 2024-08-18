@@ -1,5 +1,4 @@
 #![warn(missing_docs)]
-#![cfg_attr(doc, feature(doc_auto_cfg))]
 
 //! A Rust library for estimating quantiles in a stream,
 //! using [ClickHouse t-digest][ClickHouseRefTDigest] data structure.

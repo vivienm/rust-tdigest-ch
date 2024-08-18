@@ -6,6 +6,7 @@ description = "A Rust library for estimating quantiles in a stream, using ClickH
 repository = "https://github.com/vivienm/rust-tdigest-ch"
 documentation = "https://vivienm.github.io/rust-tdigest-ch/docs/tdigest_ch/"
 license = "MIT"
+publish = false
 
 [dependencies]
 serde = { version = "1.0.171", features = ["derive"], optional = true }
