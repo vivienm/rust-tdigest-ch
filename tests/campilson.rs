@@ -33,7 +33,7 @@ fn ints() {
     let mut digest = TDigest::from([1.0, 2.0, 3.0]);
     assert!(digest.quantile(0.5) - 2.0 < 0.0001);
 
-    let values = vec![1.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 3.0];
+    let values = [1.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 3.0];
     let mut digest = TDigest::from_iter(values.iter().copied());
     assert_eq!(digest.quantile(0.5), 2.0);
     assert_eq!(digest.len(), values.len());
