@@ -21,10 +21,6 @@ jobs:
           components: "clippy, rustfmt"
       - name: "Install sccache"
         uses: "mozilla-actions/sccache-action@v0.0.5"
-      - name: "Set up sccache"
-        run: |
-          echo "RUSTC_WRAPPER=sccache" >> "${GITHUB_ENV}"
-          echo "SCCACHE_GHA_ENABLED=true" >> "${GITHUB_ENV}"
       - name: "Install development tools"
         uses: "taiki-e/install-action@v2"
         with:
@@ -40,11 +36,13 @@ jobs:
             ~/.cargo/.crates2.json
             ~/.cargo/advisory-db/
             target/
-          key: "${{ runner.os }}-cargo-${{ hashFiles('Cargo.toml', 'Cargo.lock') }}"
+          key: "${{ runner.os }}-cargo-${{ hashFiles('Cargo.lock') }}"
           restore-keys: "${{ runner.os }}-cargo-"
       - name: "Run Just"
         run: "just ci"
         env:
+          RUSTC_WRAPPER: "sccache"
+          SCCACHE_GHA_ENABLED: "true"
           RUSTFLAGS: "-D warnings"
           RUSTDOCFLAGS: "-D warnings"
       - name: "Upload docs artifact"

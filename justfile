@@ -1,3 +1,5 @@
+set shell := ["bash", "-uc"]
+
 ci: fmt clippy test doc audit typos
 
 fmt:
