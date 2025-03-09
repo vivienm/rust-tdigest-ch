@@ -558,7 +558,7 @@ impl TDigest {
             return;
         }
         let batch_size =  // At least 2.
-            (self.centroids.len() + self.config.max_centroids - 1) / self.config.max_centroids;
+            self.centroids.len().div_ceil(self.config.max_centroids);
         debug_assert!(batch_size >= 2);
 
         let mut l_index = 0;
@@ -743,11 +743,12 @@ impl<'de> serde::Deserialize<'de> for TDigest {
 /// documentation for more.
 ///
 /// [`quantiles`]: TDigest::quantiles
+#[derive(Debug)]
 pub struct Quantiles<'a> {
     digest: &'a TDigest,
 }
 
-impl<'a> Quantiles<'a> {
+impl Quantiles<'_> {
     /// Returns the estimated quantile of the t-digest.
     ///
     /// # Examples
