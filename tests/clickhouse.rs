@@ -1,3 +1,4 @@
+#![allow(missing_docs)]
 use tdigest_ch::TDigest;
 
 #[test]

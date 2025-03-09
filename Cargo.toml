@@ -8,6 +8,10 @@ documentation = "https://vivienm.github.io/rust-tdigest-ch/docs/tdigest_ch/"
 license = "MIT"
 publish = false
 
+[lints.rust]
+missing_debug_implementations = "warn"
+missing_docs = "warn"
+
 [dependencies]
 serde = { version = "1.0.208", features = ["derive"], optional = true }
 

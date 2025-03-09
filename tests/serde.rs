@@ -1,4 +1,5 @@
 #![cfg(feature = "serde")]
+#![allow(missing_docs)]
 
 use tdigest_ch::TDigest;
 

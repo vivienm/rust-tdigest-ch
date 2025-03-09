@@ -1,3 +1,4 @@
+#![allow(missing_docs)]
 // Source: https://github.com/snaury/tdigest-go/blob/master/tdigest_test.go.
 
 use tdigest_ch::TDigest;

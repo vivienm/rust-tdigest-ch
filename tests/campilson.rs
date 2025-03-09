@@ -1,5 +1,5 @@
+#![allow(missing_docs)]
 // Source: https://github.com/CamDavidsonPilon/tdigest/blob/master/tests/test_tdigest.py
-
 use rand::Rng;
 use tdigest_ch::TDigest;
 
