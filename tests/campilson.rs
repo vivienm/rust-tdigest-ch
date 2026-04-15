@@ -1,14 +1,14 @@
 #![allow(missing_docs)]
 // Source: https://github.com/CamDavidsonPilon/tdigest/blob/master/tests/test_tdigest.py
-use rand::Rng;
+use rand::RngExt;
 use tdigest_ch::TDigest;
 
 #[test]
 fn uniform() {
     let mut digest = TDigest::new();
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
     for _ in 0..100_000 {
-        digest.insert(rng.gen::<f32>());
+        digest.insert(rng.random::<f32>());
     }
 
     for (quantile, tolerance) in [
