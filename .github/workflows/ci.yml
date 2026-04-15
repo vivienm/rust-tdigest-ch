@@ -20,7 +20,7 @@ jobs:
         with:
           components: "clippy, rustfmt"
       - name: "Install sccache"
-        uses: "mozilla-actions/sccache-action@v0.0.5"
+        uses: "mozilla-actions/sccache-action@v0.0.9"
       - name: "Install development tools"
         uses: "taiki-e/install-action@v2"
         with:
